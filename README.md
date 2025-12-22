@@ -51,6 +51,4 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
 
 ---
 
-<div align="center">
-  Made with ❤️ for crypto enthusiasts
-</div>
+
