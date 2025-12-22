@@ -43,7 +43,10 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
 
 > Add your screenshots here
 
----
+<img width="360" height="472" alt="image" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" />
+
+
+
 
 ##  Disclaimer
 
