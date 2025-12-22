@@ -43,17 +43,25 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
 
 <table>
   <tr>
-    <td><img width="653" height="429" alt="image" src="https://github.com/user-attachments/assets/b51f5f22-134e-4424-b8f4-aeb564d2d10e" />
-</td>
-    <td><img width="654" height="375" alt="image" src="https://github.com/user-attachments/assets/21c0b05f-42ff-42a9-9cf1-ae4e4b804c11" />
-</td>
-    <td><img width="360" alt="screenshot-3" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" /></td>
+    <td><img width="360" alt="screenshot-1" src="https://github.com/user-attachments/assets/b51f5f22-134e-4424-b8f4-aeb564d2d10e" /></td>
+    <td><img width="360" alt="screenshot-2" src="https://github.com/user-attachments/assets/21c0b05f-42ff-42a9-9cf1-ae4e4b804c11" /></td>
+    <td><img width="360" alt="screenshot-3" src="https://github.com/user-attachments/assets/a2c14669-3b7a-4d7b-bd9f-9ffac378f3c3" /></td>
+  </tr>
+  <tr>
+    <td><img width="360" alt="screenshot-4" src="https://github.com/user-attachments/assets/9238b991-ae46-42cb-8dd5-440dc819be79" /></td>
+    <td><img width="360" alt="screenshot-5" src="https://github.com/user-attachments/assets/b57446e6-9235-4bad-80bb-0af482c90e4b" /></td>
+    <td><img width="360" alt="screenshot-6" src="https://github.com/user-attachments/assets/ddb2a93d-23a9-4b00-b8bd-0cbffa26027a" /></td>
+  </tr>
+  <tr>
+    <td><img width="360" alt="screenshot-7" src="https://github.com/user-attachments/assets/abcf260b-508d-4030-a121-ae4a7479bafa" /></td>
+    <td></td>
+    <td></td>
   </tr>
 </table>
 
 ---
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 **CryptView is for informational purposes only.** This tool does not provide financial advice. Always do your own research before making investment decisions.
 
