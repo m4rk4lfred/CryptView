@@ -8,19 +8,19 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
 
 <table>
   <tr>
-    <td> <b>Real-time Portfolio Tracking</b></td>
+    <td><b>Real-time Portfolio Tracking</b></td>
     <td>Monitor your crypto holdings with live price updates</td>
   </tr>
   <tr>
-    <td> <b>Profit/Loss Analysis</b></td>
+    <td><b>Profit/Loss Analysis</b></td>
     <td>Track gains and losses across all your investments</td>
   </tr>
   <tr>
-    <td> <b>Price Charts & Analytics</b></td>
+    <td><b>Price Charts & Analytics</b></td>
     <td>Visualize historical performance and market trends</td>
   </tr>
   <tr>
-    <td> <b>Multi-Exchange Support</b></td>
+    <td><b>Multi-Exchange Support</b></td>
     <td>Connect multiple wallets and exchange accounts</td>
   </tr>
   <tr>
@@ -28,11 +28,11 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
     <td>View your portfolio value in different fiat currencies</td>
   </tr>
   <tr>
-    <td> <b>Price Alerts</b></td>
+    <td><b>Price Alerts</b></td>
     <td>Get notified when your assets hit target prices</td>
   </tr>
   <tr>
-    <td> <b>Responsive Design</b></td>
+    <td><b>Responsive Design</b></td>
     <td>Access your portfolio on desktop, tablet, or mobile</td>
   </tr>
 </table>
@@ -41,17 +41,19 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
 
 ## 📸 Screenshots
 
-> Add your screenshots here
+<table>
+  <tr>
+    <td><img width="360" alt="screenshot-1" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" /></td>
+    <td><img width="360" alt="screenshot-2" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" /></td>
+    <td><img width="360" alt="screenshot-3" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" /></td>
+  </tr>
+</table>
 
-<img width="360" height="472" alt="image" src="https://github.com/user-attachments/assets/e594a802-a71d-472a-ab4a-4ea5e2910548" />
+---
 
-
-
-
-##  Disclaimer
+## Disclaimer
 
 **CryptView is for informational purposes only.** This tool does not provide financial advice. Always do your own research before making investment decisions.
 
 ---
-
 
