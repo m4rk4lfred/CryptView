@@ -54,8 +54,10 @@ A real-time cryptocurrency portfolio tracker that helps you monitor your crypto 
   </tr>
   <tr>
     <td><img width="360" alt="screenshot-7" src="https://github.com/user-attachments/assets/abcf260b-508d-4030-a121-ae4a7479bafa" /></td>
-    <td></td>
-    <td></td>
+    <td><img width="655" height="422" alt="image" src="https://github.com/user-attachments/assets/31ba3834-b9a6-4de3-b4a3-b20283d663cf" />
+</td>
+    <td><img width="720" height="624" alt="image" src="https://github.com/user-attachments/assets/f379adf3-a04a-4a3e-b09a-ef909f97355c" />
+</td>
   </tr>
 </table>
 
