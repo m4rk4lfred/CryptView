@@ -8,7 +8,7 @@ function App() {
   const [darkMode, setDarkMode] = useState('')
 
   useEffect(()=>{
-    setTime(18 )
+    setTime(new Date().getHours() )
     {/*new Date().getHours() */}
  
   },[])
@@ -21,13 +21,13 @@ function App() {
        localStorage.setItem('theme','')
        setDarkMode(localStorage.getItem('theme'))
     }
-  })
+  },[])
 
   return (
-    <div className={`min-h-screen ${darkMode}  w-full bg-[#f8fafc] dark:bg-primary-dark relative `}>
+    <div className={`min-h-screen ${darkMode} w-screen bg-[#f8fafc] dark:bg-primary-dark `}>
       {/*Grid setting up*/}
       <div
-        className={`${darkMode === 'dark' ? 'hidden' :''} absolute inset-0 z-0 mask-b-from-0% mask-b-to-96%`}
+        className={`${darkMode === 'dark' ? 'hidden' :''} fixed inset-0 z-0 mask-b-from-0% mask-b-to-96%`}
         style={{
           backgroundImage: 'linear-gradient(to right, #D2D2D2 1px, transparent 1px), linear-gradient(to bottom, #D2D2D2 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -37,7 +37,7 @@ function App() {
       {darkMode && 
        (   
        <div
-        className="absolute inset-0 z-0 mask-b-from-0% mask-b-to-80%"
+        className="fixed inset-0 z-0 mask-b-from-0% mask-b-to-80%"
         style={{
           backgroundImage: 'linear-gradient(to right, #575757 1px, transparent 1px), linear-gradient(to bottom, #575757 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -47,16 +47,19 @@ function App() {
 
     )
       }
-
-      <div className="relative z-10">
+          <div className="relative z-10">
         <Landingpage />
       </div>
+
     </div>
   )
 }
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+
+      <App />
+
+
   </StrictMode>,
 )

@@ -5,16 +5,16 @@ function Header(){
   const theme = localStorage.getItem('theme')
    return(
      <> 
-       <div className="grid grid-cols-2 font-poppins py-8">
-         <div className="flex gap-1 ml-8 justify-start items-center md:mx-20 md:my-6">
+       <div className="grid grid-cols-2 font-poppins px-10 pt-8 md:px-[8em]">
+         <div className="flex gap-1  justify-start items-center">
            <img src={theme === 'dark'? brandLogoLight:brandLogoDark} alt="brandLogo" />
            <h1 className='font-bold text-lg text-primary-dark dark:text-primary'>CRYPT<span className='text-branding'>VIEW</span></h1>
          </div>
-         <div className="flex justify-end items-center mr-8 md:hidden">
+         <div className="flex justify-end items-center md:hidden">
            <IoPersonOutline className='text-2xl text-primary-dark dark:text-primary'/>
          </div>
          
-          <div className="md:flex hidden justify-end items-center mr-24">
+          <div className="md:flex hidden justify-end items-center">
            <p className='dark:text-primary font-semibold tracking-[0.200em]'>Portfolio</p>
          </div>
        </div>
