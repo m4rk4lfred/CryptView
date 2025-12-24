@@ -5,7 +5,7 @@ function Header(){
   const theme = localStorage.getItem('theme')
    return(
      <> 
-       <div className="grid grid-cols-2 font-poppins px-10 pt-8 md:px-[8em]">
+       <div data-aos={"fade"} className="grid grid-cols-2 font-poppins px-10 pt-8 md:px-[8em]">
          <div className="flex gap-1  justify-start items-center">
            <img src={theme === 'dark'? brandLogoLight:brandLogoDark} alt="brandLogo" />
            <h1 className='font-bold text-lg text-primary-dark dark:text-primary'>CRYPT<span className='text-branding'>VIEW</span></h1>

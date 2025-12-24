@@ -2,6 +2,9 @@ import { StrictMode, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import Landingpage from '../src/Pages/LandingPage/Landingpage'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 function App() {
   const [time, setTime] = useState()
@@ -23,8 +26,15 @@ function App() {
     }
   },[])
 
+  useEffect(() => {
+      AOS.init({
+        duration:500,
+        easing:'ease'
+      });
+  }, []);
+
   return (
-    <div className={`min-h-screen ${darkMode} w-screen bg-[#f8fafc] dark:bg-primary-dark `}>
+    <div  className={`min-h-screen ${darkMode} w-screen bg-[#f8fafc] dark:bg-primary-dark `}>
       {/*Grid setting up*/}
       <div
         className={`${darkMode === 'dark' ? 'hidden' :''} fixed inset-0 z-0 mask-b-from-0% mask-b-to-96%`}
@@ -47,7 +57,7 @@ function App() {
 
     )
       }
-          <div className="relative z-10">
+      <div  className="relative z-10">
         <Landingpage />
       </div>
 
