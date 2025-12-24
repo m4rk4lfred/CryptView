@@ -29,7 +29,7 @@ function App() {
   useEffect(() => {
       AOS.init({
         duration:500,
-        easing:'ease',
+        easing:'ease-in-out',
        
       });
   }, []);

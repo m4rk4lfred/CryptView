@@ -15,7 +15,14 @@ function Header(){
          </div>
          
           <div className="md:flex hidden justify-end items-center">
-           <p className='dark:text-primary font-semibold tracking-[0.200em]'>Portfolio</p>
+           <p className="dark:text-primary font-semibold tracking-[0.200em] relative before:content-[''] before:bg-black 
+           before:absolute  before:w-full before:h-0.5 before:bottom-0 before:-left-0.4  before:ease-in-out
+           before:origin-left
+           before:scale-x-0
+           hover:before:scale-x-100
+           before:transition-transform before:duration-500 
+           cursor-pointer
+           ">Portfolio</p>
          </div>
        </div>
      </>
