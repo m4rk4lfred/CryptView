@@ -5,7 +5,7 @@ function Features(){
   
     return(
         <>
-          <div  className="grid grid-cols-1 grid-rows-3 font-poppins mt-65 px-6 gap-35 md:gap-2 md:px-15 text-primary-text dark:text-[#F5F5F5] md:grid-cols-3 md:grid-row-1" >
+          <div className="grid h-screen w-screen grid-cols-1 grid-rows-3 font-poppins mt-55 px-6 gap-35 md:gap-2 md:px-15 text-primary-text dark:text-[#F5F5F5] md:grid-cols-3 md:grid-row-1" >
              <div data-aos={"zoom-in-up"} className="flex flex-col  justify-center items-center px-13 ">
                 <div className='flex flex-row justify-center items-center gap-2'>
                     <img src={analysisIcon} alt="analysis.svg" className='size-7' />
