@@ -11,7 +11,8 @@ function App() {
   const [darkMode, setDarkMode] = useState('')
 
   useEffect(()=>{
-    setTime(new Date().getHours() )
+    setTime(new Date().getHours())
+    console.log(`data ${new Date().getHours()}`)
     {/*new Date().getHours() */}
  
   },[])

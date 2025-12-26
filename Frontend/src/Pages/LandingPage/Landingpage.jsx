@@ -5,7 +5,7 @@ import Features2 from '../LandingPage/Features2'
 function Landingpage(){
    return(
      <>
-     <div className='w-auto h-auto inset-0 '>
+     <div className='w-auto h-auto inset-0  '>
        <Header></Header>
        <Hero></Hero>
        <Features></Features>

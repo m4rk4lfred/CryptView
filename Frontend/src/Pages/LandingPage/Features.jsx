@@ -5,7 +5,7 @@ function Features(){
   
     return(
         <>
-          <div className="grid h-auto bg-green-400 w-screen grid-cols-1 grid-rows-3 font-poppins mt-55 px-6 gap-35 md:gap-2 md:px-15 text-primary-text dark:text-[#F5F5F5] md:grid-cols-3 md:grid-row-1" >
+          <div className="grid h-9/12  w-screen grid-cols-1 grid-rows-3 font-poppins mt-55 px-6 gap-35 md:gap-2  text-primary-text dark:text-[#F5F5F5] md:grid-cols-3 " >
              <div data-aos={"zoom-in-up"} className="flex flex-col  justify-center items-center px-13 ">
                 <div className='flex flex-row justify-center items-center gap-2'>
                     <img src={analysisIcon} alt="analysis.svg" className='size-7' />
@@ -32,7 +32,6 @@ function Features(){
                 <p className='text-justify mt-8 leading-[2.7em]'>Your data remains secure with read-only access. There is no need to share private keys or passwords—just provide your public address to start.</p>
              </div>
 
-             <div></div>
           </div>
         </>
     )
