@@ -27,7 +27,7 @@ function Features(){
             <div data-aos={"zoom-in-up"} className="flex flex-col  justify-center items-center px-13 ">
                 <div className='flex flex-row justify-center items-center gap-2'>
                     <img src={privacyIcon} alt="analysis.svg" className='size-7' />
-                    <h3 className='font-semibold text-primary-text tracking-[0.150em]'>Privacy-First Security</h3>
+                    <h3 className='font-semibold  tracking-[0.150em]'>Privacy-First Security</h3>
                 </div>
                 <p className='text-justify mt-8 leading-[2.7em]'>Your data remains secure with read-only access. There is no need to share private keys or passwords—just provide your public address to start.</p>
              </div>

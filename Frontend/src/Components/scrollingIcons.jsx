@@ -48,7 +48,7 @@ function scrollingIcons(){
           <div  className={`flex min-w-55 min-h-5  my-5 mx-2 justify-center items-center font-poppins`}>
             <div className="  w-full h-13 flex p-4 justify-center items-center gap-2 rounded-xl ">
               <img className='w-5' src={data.logo} alt="logo.png" />
-              <p className="text-sm text-[#737373]">{data.iconText}</p>
+              <p className="text-sm text-[#737373] dark:text-primary">{data.iconText}</p>
             </div>
 
         </div>
@@ -74,7 +74,7 @@ function scrollingIcons(){
           <div  className={`flex min-w-55 min-h-5 my-5 mx-2 justify-center items-center font-poppins`}>
             <div className="  w-full h-13 flex p-4 justify-center items-center gap-2 rounded-xl ">
               <img className='w-5' src={data.logo} alt="logo.png" />
-              <p className="text-sm text-[#737373]">{data.iconText}</p>
+              <p className="text-sm text-[#737373] dark:text-primary">{data.iconText}</p>
             </div>
 
         </div>

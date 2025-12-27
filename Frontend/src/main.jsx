@@ -4,28 +4,33 @@ import './index.css'
 import Landingpage from '../src/Pages/LandingPage/Landingpage'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import RegisterAccount from '../src/Pages/AccountAuthentication/Accountmodal'
 
 function App() {
-  const [time, setTime] = useState()
-  const [darkMode, setDarkMode] = useState('')
-
-  useEffect(()=>{
-    setTime(new Date().getHours())
-    console.log(`data ${new Date().getHours()}`)
-    {/*new Date().getHours() */}
  
-  },[])
-  useEffect(()=>{
-    if(time <= 6 || time >= 18){
-       localStorage.setItem('theme','dark')
-       setDarkMode(localStorage.getItem('theme'))
+  const [darkMode, setDarkMode] = useState(false)
+  const [isShow, changeShow] = useState(true)
+  
+  useEffect(() => {
+    const checkTheme = () => {
+    const currentTime = new Date().getHours()
+    const isDarkMode = currentTime <= 6 || currentTime >= 18
+
+    if(isDarkMode){
+       localStorage.setItem('theme', 'dark')
+       setDarkMode(true)
     }
     else{
-       localStorage.setItem('theme','')
-       setDarkMode(localStorage.getItem('theme'))
+      localStorage.setItem('theme','light')
+      setDarkMode(false)
     }
+    }
+
+    checkTheme()
+    const interval = setInterval(checkTheme, 60000)
+    return() => clearInterval(interval)
   },[])
+ 
 
   useEffect(() => {
       AOS.init({
@@ -36,16 +41,18 @@ function App() {
   }, []);
 
   return (
-    <div  className={`min-h-screen ${darkMode} w-screen bg-[#f8fafc] dark:bg-primary-dark `}>
+
+ 
+    <div  className={`min-h-screen ${darkMode ? 'dark':''} w-screen bg-[#f8fafc] dark:bg-primary-dark `}>
       {/*Grid setting up*/}
       <div
-        className={`${darkMode === 'dark' ? 'hidden' :''} fixed inset-0 z-0 mask-b-from-0% mask-b-to-96%`}
+        className={`${darkMode ? 'hidden' :''} fixed inset-0 z-0 mask-b-from-0% mask-b-to-96%`}
         style={{
           backgroundImage: 'linear-gradient(to right, #D2D2D2 1px, transparent 1px), linear-gradient(to bottom, #D2D2D2 1px, transparent 1px)',
           backgroundSize: '20px 20px',
         }}
       />
-
+      {isShow && <RegisterAccount></RegisterAccount>}
       {darkMode && 
        (   
        <div
@@ -59,6 +66,9 @@ function App() {
 
     )
       }
+
+    
+      
       <div  className="relative z-10">
         <Landingpage />
       </div>

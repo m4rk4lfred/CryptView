@@ -22,6 +22,7 @@ function Header(){
            hover:before:scale-x-100
            before:transition-transform before:duration-500 
            cursor-pointer
+           dark:before:bg-primary
            ">Portfolio</p>
          </div>
        </div>
