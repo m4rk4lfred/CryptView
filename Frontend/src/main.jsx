@@ -9,7 +9,7 @@ import RegisterAccount from '../src/Pages/AccountAuthentication/Accountmodal'
 function App() {
  
   const [darkMode, setDarkMode] = useState(false)
-  const [isShow, changeShow] = useState(true)
+  const [showRegistrationModal, setModalShow] = useState(false)
   
   useEffect(() => {
     const checkTheme = () => {
@@ -52,7 +52,7 @@ function App() {
           backgroundSize: '20px 20px',
         }}
       />
-      {isShow && <RegisterAccount></RegisterAccount>}
+      <RegisterAccount showState={showRegistrationModal} changeState={setModalShow}></RegisterAccount>
       {darkMode && 
        (   
        <div
@@ -70,7 +70,7 @@ function App() {
     
       
       <div  className="relative z-10">
-        <Landingpage />
+        <Landingpage showState={setModalShow}/>
       </div>
 
     </div>

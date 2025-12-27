@@ -4,11 +4,11 @@ import Features from '../LandingPage/Features'
 import Features2 from '../LandingPage/Features2'
 import Summary from '../LandingPage/Summary'
 import StartTracking from '../LandingPage/StartTracking'
-function Landingpage(){
+function Landingpage({showState}){
    return(
      <>
      <div className='w-auto h-auto inset-0'>
-       <Header></Header>
+       <Header showModal={showState}></Header>
        <Hero></Hero>
        <Features></Features>
        <Features2></Features2>

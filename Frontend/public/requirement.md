@@ -7,6 +7,7 @@ npm install react
 npm install react-dom
 npm install react-icons
 npm install tailwindcss
+npm install --save react-tabs
 Dev dependencies (tooling):
 
 npm install -D @eslint/js

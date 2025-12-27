@@ -1,8 +1,12 @@
 import brandLogoDark from '../../assets/Brand_logo_Dark.svg'
 import brandLogoLight from '../../assets/Brand_logo_Light.svg'
 import { IoPersonOutline } from "react-icons/io5";
-function Header(){
+import AccountModal from '../AccountAuthentication/Accountmodal'
+import { useState } from 'react'
+function Header({showModal}){
   const theme = localStorage.getItem('theme')
+  
+
    return(
      <> 
        <div data-aos={"fade"} className="grid grid-cols-2 font-poppins px-10 pt-8 md:px-[8em]">
@@ -11,7 +15,8 @@ function Header(){
            <h1 className='font-bold text-lg text-primary-dark dark:text-primary'>CRYPT<span className='text-branding'>VIEW</span></h1>
          </div>
          <div className="flex justify-end items-center md:hidden">
-           <IoPersonOutline className='text-2xl text-primary-dark dark:text-primary'/>
+           <IoPersonOutline className='text-2xl text-primary-dark dark:text-primary cursor-pointer hover:text-branding duration-175'  onClick={() => 
+            showModal(true)} />
          </div>
          
           <div className="md:flex hidden justify-end items-center">
@@ -23,10 +28,15 @@ function Header(){
            before:transition-transform before:duration-500 
            cursor-pointer
            dark:before:bg-primary
-           ">Portfolio</p>
+           " onClick={() => 
+            showModal(true)
+           }>Portfolio</p>
          </div>
+         
        </div>
+       
      </>
+     
    )
 }
 export default Header;
