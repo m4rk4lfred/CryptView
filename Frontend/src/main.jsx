@@ -5,6 +5,9 @@ import Landingpage from '../src/Pages/LandingPage/Landingpage'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import RegisterAccount from '../src/Pages/AccountAuthentication/Accountmodal'
+import { BrowserRouter, Routes, Route } from "react-router";
+import ProtectedRoutes from  '../src/Routes/ProtectedRoutes'
+import Dashboard from '../src/Pages/Main/Main'
 
 function App() {
  
@@ -71,6 +74,7 @@ function App() {
       
       <div  className="relative z-10">
         <Landingpage showState={setModalShow}/>
+
       </div>
 
     </div>
@@ -79,8 +83,15 @@ function App() {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-
-      <App />
+    <BrowserRouter>
+     <Routes>
+       <Route path='/' element={<App />}/>
+      
+         <Route path='/dashboard' element={<ProtectedRoutes><Dashboard /></ProtectedRoutes>}/>
+      
+     </Routes>
+    </BrowserRouter>
+     
 
 
   </StrictMode>,

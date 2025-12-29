@@ -7,6 +7,7 @@ import { IoIosClose } from "react-icons/io";
 import {AnimatePresence, motion} from 'motion/react'
 import Notification from '../../Components/notificationPop'
 import { header } from 'motion/react-client';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 function Accountmodal( {showState,changeState} ) {
@@ -26,6 +27,7 @@ function Accountmodal( {showState,changeState} ) {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
+  const navigate = useNavigate()
   const handleRegistration = async (e) => {
 
       if(!emailRegex.test(emailSignup)){
@@ -133,8 +135,11 @@ function Accountmodal( {showState,changeState} ) {
             message:data.message
           }
         )
+        localStorage.setItem('token','user12345');
         setNotificationVisibility(true);  
         setnotifId(id => id + 1); 
+        navigate('/dashboard', {replace:true})
+        
 
     } catch (error) {
           setNotification(
