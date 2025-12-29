@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { IoIosClose } from "react-icons/io";
 import {AnimatePresence, motion} from 'motion/react'
 import Notification from '../../Components/notificationPop'
+import { header } from 'motion/react-client';
 
 
 function Accountmodal( {showState,changeState} ) {
@@ -16,19 +17,43 @@ function Accountmodal( {showState,changeState} ) {
   const [confirmPasswordSignup, setConfirmPasswordSignup] = useState('')
 
   // Login state
-  const [usernameLogin, setUsernameLogin] = useState('')
+  const [emailLogin, setEmailLogin] = useState('')
   const [passwordLogin, setPasswordLogin] = useState('')
 
   const [notificationInfo, setNotification] = useState(null)
   const [showNotification,setNotificationVisibility] = useState(false)
   const [notifId, setnotifId] = useState(0)
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
   const handleRegistration = async (e) => {
+
+      if(!emailRegex.test(emailSignup)){
+          setNotification({
+          type: 'error',
+          header: 'Invalid email',
+          message: 'Please input a valid email'
+        })
+        setNotificationVisibility(true)
+        setnotifId(id => id + 1)
+        return;
+      }
       if(passwordSignup!==confirmPasswordSignup){
         setNotification({
           type: 'error',
           header: 'Incorrect Password',
           message: 'Passwords do not match.'
+        })
+        setNotificationVisibility(true)
+        setnotifId(id => id + 1)
+        return;
+      }
+
+      if(passwordSignup.length < 8){
+          setNotification({
+          type: 'error',
+          header: 'Invalid input',
+          message: 'Please input atleast 8 characters'
         })
         setNotificationVisibility(true)
         setnotifId(id => id + 1)
@@ -55,24 +80,79 @@ function Accountmodal( {showState,changeState} ) {
         const data = await response.json()
         setNotification(
           {
-            type:'',
-            header:'Account Created',
+            type:data.notificationType,
+            header:data.notificationHeader,
+            message:data.message
+          }
+        )
+        console.log(data.returnedValue)
+        setNotificationVisibility(true);  
+        setnotifId(id => id + 1); 
+        setUsernameSignup('')
+        setEmailSignup('')
+        setConfirmPasswordSignup('')
+        setPasswordSignup('')
+
+
+      } catch (error) {
+            setNotification(
+          {
+            type:'error',
+            header:'Error Connecting to database',
+            message:error.message
+          }
+        )
+        setNotificationVisibility(true);  
+        setnotifId(id => id + 1); 
+      }
+  }
+
+  const handleLogin = async (e) => {
+     
+    try {
+      const response = await fetch('/backend/login',{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+           email: emailLogin,
+           user_password: passwordLogin
+        })
+      })
+       
+      if(!response.ok){
+         throw new Error(`Response status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setNotification(
+          {
+            type:data.notificationType,
+            header:data.notificationHeader,
             message:data.message
           }
         )
         setNotificationVisibility(true);  
         setnotifId(id => id + 1); 
 
-
-      } catch (error) {
-         console.error(`Error ${error.message}`)
-      }
-  }
+    } catch (error) {
+          setNotification(
+          {
+            type:'error',
+            header:'Error Connecting to database',
+            message:error.message
+          }
+        )
+        setNotificationVisibility(true);  
+        setnotifId(id => id + 1); 
+    }
+  } 
   return (
     <>
       {showNotification&&(
         <Notification key={notifId} notificationVisibility={showNotification} notificationType={notificationInfo.type}
-        noticationHeader={notificationInfo.header} notificationMessage={notificationInfo.message}
+        notificationHeader={notificationInfo.header} notificationMessage={notificationInfo.message}
         ></Notification>
       )}
      <AnimatePresence>
@@ -136,6 +216,7 @@ function Accountmodal( {showState,changeState} ) {
                     value={passwordSignup}
                     onChange={(e) => setPasswordSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
+                    
                   />
       
                 </div>
@@ -148,6 +229,7 @@ function Accountmodal( {showState,changeState} ) {
                     value={confirmPasswordSignup}
                     onChange={(e) => setConfirmPasswordSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
+                     
                   />
 
                   
@@ -161,11 +243,11 @@ function Accountmodal( {showState,changeState} ) {
               <TabPanel className="outline-none">
                 {/* Login form */}
                 <div className="flex flex-col gap-3">
-                  <p className="text-sm text-primary-text">Username</p>
+                  <p className="text-sm text-primary-text">Email</p>
                   <input
                     type="text"
-                    value={usernameLogin}
-                    onChange={(e) => setUsernameLogin(e.target.value)}
+                    value={emailLogin}
+                    onChange={(e) => setEmailLogin(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
                   />
                 </div>
@@ -180,7 +262,7 @@ function Accountmodal( {showState,changeState} ) {
                   />
                 </div>
 
-                <button className="w-full py-2 mt-2 border-2 border-branding rounded-xl text-primary bg-branding hover:bg-transparent hover:border-branding cursor-pointer hover:text-branding duration-75">
+                <button onClick={handleLogin} className="w-full py-2 mt-2 border-2 border-branding rounded-xl text-primary bg-branding hover:bg-transparent hover:border-branding cursor-pointer hover:text-branding duration-75">
                   Login
                 </button>
               </TabPanel>

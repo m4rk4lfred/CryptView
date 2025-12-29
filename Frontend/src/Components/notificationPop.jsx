@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-function notificationPop({ notificationVisibility, notificationType,noticationHeader, notificationMessage }) {
+function notificationPop({ notificationVisibility, notificationType,notificationHeader, notificationMessage }) {
   const [isVisible, setVisible] = useState(notificationVisibility);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function notificationPop({ notificationVisibility, notificationType,noticationHe
           `}
         >
           <div className="bg-white w-full ml-2 rounded-l-2xl px-3 py-2 h-full">
-            <h1 className={`mb-1 font-semibold text-branding text-[1em] ${notificationType === "error" ? "text-red-300" : "text-branding"}`}>{noticationHeader}</h1>
+            <h1 className={`mb-1 font-semibold text-branding text-[1em] ${notificationType === "error" ? "text-red-300" : "text-branding"}`}>{notificationHeader}</h1>
             <p className="text-[0.70em] text-primary-text">{notificationMessage}</p>
           </div>
         </motion.div>
