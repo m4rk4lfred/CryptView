@@ -5,6 +5,8 @@ import 'react-tabs/style/react-tabs.css'
 import { useState } from 'react'
 import { IoIosClose } from "react-icons/io";
 import {AnimatePresence, motion} from 'motion/react'
+import Notification from '../../Components/notificationPop'
+
 
 function Accountmodal( {showState,changeState} ) {
   // Signup state
@@ -17,11 +19,65 @@ function Accountmodal( {showState,changeState} ) {
   const [usernameLogin, setUsernameLogin] = useState('')
   const [passwordLogin, setPasswordLogin] = useState('')
 
+  const [notificationInfo, setNotification] = useState(null)
+  const [showNotification,setNotificationVisibility] = useState(false)
+  const [notifId, setnotifId] = useState(0)
+  
+  const handleRegistration = async (e) => {
+      if(passwordSignup!==confirmPasswordSignup){
+        setNotification({
+          type: 'error',
+          header: 'Incorrect Password',
+          message: 'Passwords do not match.'
+        })
+        setNotificationVisibility(true)
+        setnotifId(id => id + 1)
+        return;
+      }
+      
+      try {
+       const response = await fetch('/backend/register',{
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username : usernameSignup,
+          email : emailSignup,
+          userPassword: passwordSignup
+        }) 
+       })    
+       
+       if (!response.ok) {
+         throw new Error(`Response status: ${response.status}`)
+       }
+       
+        const data = await response.json()
+        setNotification(
+          {
+            type:'',
+            header:'Account Created',
+            message:data.message
+          }
+        )
+        setNotificationVisibility(true);  
+        setnotifId(id => id + 1); 
+
+
+      } catch (error) {
+         console.error(`Error ${error.message}`)
+      }
+  }
   return (
     <>
+      {showNotification&&(
+        <Notification key={notifId} notificationVisibility={showNotification} notificationType={notificationInfo.type}
+        noticationHeader={notificationInfo.header} notificationMessage={notificationInfo.message}
+        ></Notification>
+      )}
      <AnimatePresence>
       {showState &&(
-     
+      
       <motion.div 
       initial={{scale: 0}}
       animate={{scale: 1}}
@@ -54,6 +110,7 @@ function Accountmodal( {showState,changeState} ) {
                   <p className="text-sm text-primary-text">Username</p>
                   <input
                     type="text"
+                    required
                     value={usernameSignup}
                     onChange={(e) => setUsernameSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
@@ -65,6 +122,7 @@ function Accountmodal( {showState,changeState} ) {
                   <input
                     type="email"
                     value={emailSignup}
+                    required
                     onChange={(e) => setEmailSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
                   />
@@ -74,6 +132,7 @@ function Accountmodal( {showState,changeState} ) {
                   <p className="text-sm text-primary-text">Password</p>
                   <input
                     type="password"
+                    required
                     value={passwordSignup}
                     onChange={(e) => setPasswordSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
@@ -85,6 +144,7 @@ function Accountmodal( {showState,changeState} ) {
                   <p className="text-sm text-primary-text">Confirm Password</p>
                   <input
                     type="password"
+                    required
                     value={confirmPasswordSignup}
                     onChange={(e) => setConfirmPasswordSignup(e.target.value)}
                     className="border-b-2 p-2 text-sm border-branding focus:outline-none"
@@ -93,7 +153,7 @@ function Accountmodal( {showState,changeState} ) {
                   
                 </div>
 
-                <button className="w-full py-2 mt-5 border-2 border-branding rounded-xl text-primary bg-branding hover:bg-transparent hover:border-branding cursor-pointer hover:text-branding duration-75">
+                <button onClick={handleRegistration} className="w-full py-2 mt-5 border-2 border-branding rounded-xl text-primary bg-branding hover:bg-transparent hover:border-branding cursor-pointer hover:text-branding duration-75">
                   Signup
                 </button>
               </TabPanel>
