@@ -3,11 +3,54 @@ import Header from './mainHeader'
 import '../../index.css'
 import AccountTab from '../Main/AccountTab'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 {/* dashboard component */}
 function Dashboard(){
+  const [fetchedCoins, setFetchedCoins] = useState([]); 
+  const [isLoading, setLoading] = useState(true)
+  const [currentPrice, setPrice] = useState({})
+  useEffect(() => {
+    const ping = async () => {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250' , {
+          method:'GET',
+          headers:{'x-cg-demo-api-key': 'CG-7a1Ju6uoaAhZbKGq1tPJvehN',}
+        }
+            
+          
+        );
+        if (!response.ok) {
+          console.log(`Coingecko response status: ${response.status}`);
+          return;
+        }
+        const data = await response.json()
+        console.log('Successfully connected to Coingecko');
+        const Coins = data.map((coins) => ({
+          coinImage:coins.image,
+          coinTitle: coins.name ,  
+        }))
+        const coinsPrice = data.reduce((acc , coins) =>{
+          acc[coins.name] = coins.current_price 
+          return acc
+        }  
+        )
+        setFetchedCoins(Coins)
+        setPrice(coinsPrice)
+        console.log('Fetched coins:', Coins); 
+        console.log('Fetched price:', coinsPrice['etherium']); 
+        
+      } catch (err) {
+        console.log('Coingecko request failed', err);
+      }
+      finally{
+        setLoading(false)
+      }
+    };
 
+    ping();
+  }, []);
+  
   {/* get theme from localStorage */}
   const darkTheme = localStorage.getItem('theme')
   const [tabLocation , setTabLocation] = useState('Accounts')
@@ -44,29 +87,57 @@ function Dashboard(){
       )}
 
 
-      {/* main content container */}
-      <div className="relative z-10 font-poppins">
-          <Header theme={darkTheme}></Header>
-         
-           <div className='w-full h-full mt-8'>
-           <div>
-                <h1 className="text-2xl px-10 mb-5 font-bold ">{tabLocation}</h1>
-            </div>
-                   <Tabs>
-                    <TabList className={' w-full flex flex-row justify-center items-center h-auto text-[0.7em] '}>
-                        <Tab onClick={() => setTabLocation('Accounts')} selectedClassName='text-branding'>Accounts</Tab>
-                        <Tab onClick={() => setTabLocation('Coins')} selectedClassName='text-branding'>Coins</Tab>
-                        <Tab onClick={() => setTabLocation('Favorites')} selectedClassName='text-branding'>Favorites</Tab>
-                        <Tab onClick={() => setTabLocation('Transactions')} selectedClassName='text-branding'>Transactions</Tab>
-                        <Tab onClick={() => setTabLocation('History')} selectedClassName='text-branding'>History</Tab>
-                    </TabList>
-                    
-                    <TabPanel>
-                      <AccountTab></AccountTab>
-                    </TabPanel>
-                </Tabs>
-            </div>
+     {/* main content container */}
+{isLoading ? (
+  // Loading Placeholder
+  <div className="relative z-10 font-poppins">
+    <Header theme={darkTheme}></Header>
+    
+    <div className='w-full h-full mt-8'>
+      <div className='px-10 mb-5'>
+        <div className='h-8 w-48 bg-gray-300 dark:bg-gray-700 animate-pulse rounded'></div>
       </div>
+      
+      {/* Tab skeleton */}
+      <div className='w-full flex flex-row justify-center items-center gap-8 mb-5'>
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className='h-6 w-20 bg-gray-300 dark:bg-gray-700 animate-pulse rounded'></div>
+        ))}
+      </div>
+      
+      {/* Content skeleton */}
+      <div className='px-10 mt-5'>
+        <div className='flex justify-end mb-4'>
+          <div className='h-7 w-7 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-full'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+) : (
+  // Actual Content
+  <div className="relative z-10 font-poppins">
+    <Header theme={darkTheme}></Header>
+    
+    <div className='w-full h-full mt-8'>
+      <div>
+        <h1 className="text-2xl px-10 mb-5 font-bold ">{tabLocation}</h1>
+      </div>
+      <Tabs>
+        <TabList className={' w-full flex flex-row justify-center items-center h-auto text-[0.7em] '}>
+          <Tab onClick={() => setTabLocation('Accounts')} selectedClassName='text-branding'>Accounts</Tab>
+          <Tab onClick={() => setTabLocation('Coins')} selectedClassName='text-branding'>Coins</Tab>
+          <Tab onClick={() => setTabLocation('Favorites')} selectedClassName='text-branding'>Favorites</Tab>
+          <Tab onClick={() => setTabLocation('Transactions')} selectedClassName='text-branding'>Transactions</Tab>
+          <Tab onClick={() => setTabLocation('History')} selectedClassName='text-branding'>History</Tab>
+        </TabList>
+
+        <TabPanel>
+          <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice}></AccountTab>
+        </TabPanel>
+      </Tabs>
+    </div>
+  </div>
+)}
 
     </>
   )
