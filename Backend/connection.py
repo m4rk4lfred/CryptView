@@ -37,7 +37,7 @@ def handle_registration():
     authenticationEmail = cursor.fetchone()
 
     if not authenticationEmail:
-     sql = "INSERT INTO credentials (username,email,user_passkey) VALUES (%s,%s,%s)"
+     sql = "INSERT INTO credentials (username,email,password) VALUES (%s,%s,%s)"
      cursor.execute(sql,(username,email,password))
      db_connection.commit()
      return jsonify({ 'message': 'Successfully created an account', 'returnedValue': authenticationEmail, 'notificationType':'', 'notificationHeader':'Successfully created an account'})
