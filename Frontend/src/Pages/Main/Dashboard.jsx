@@ -4,12 +4,14 @@ import '../../index.css'
 import AccountTab from '../Main/AccountTab'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { useState,useEffect } from 'react';
-
+import { PiExport } from "react-icons/pi";
+import CoinMarket from '../Main/coinMarket'
 {/* dashboard component */}
 function Dashboard(){
   const [fetchedCoins, setFetchedCoins] = useState([]); 
   const [isLoading, setLoading] = useState(true)
   const [currentPrice, setPrice] = useState({})
+  
   useEffect(() => {
     const ping = async () => {
       try {
@@ -118,23 +120,50 @@ function Dashboard(){
   <div className="relative z-10 font-poppins">
     <Header theme={darkTheme}></Header>
     
-    <div className='w-full h-full mt-8'>
+    <div className='grid w-full h-full mt-8  md:grid-cols-[30%_70%]'>
       <div>
         <h1 className="text-2xl px-10 mb-5 font-bold ">{tabLocation}</h1>
+        <div className='hidden md:flex w-auto h-auto'>
+           <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} ></AccountTab>
+        </div>
       </div>
-      <Tabs>
-        <TabList className={' w-full flex flex-row justify-center items-center h-auto text-[0.7em] '}>
-          <Tab onClick={() => setTabLocation('Accounts')} selectedClassName='text-branding'>Accounts</Tab>
+      
+      <div>
+       
+       <div className='hidden md:flex justify-between items-center'>
+           <div className='flex flex-col gap-3 text-primary-dark'>
+            <h1 className='text-3xl font-bold tracking-[0.35em]'>Wallet</h1>
+            <p  className='text-5xl font-bold tracking-[0.15em]'>30$</p>
+        </div>
+
+        <div>
+           <div className='flex flex-row text-primary bg-branding rounded-2xl cursor-pointer px-4 gap-3 justify-center items-center py-2 mr-12'>
+             <PiExport size={22}/>
+             Export
+           </div>
+        </div>
+       </div>
+        
+        <Tabs defaultIndex={0||1}>
+        <TabList className={'w-full flex flex-row justify-center items-center h-auto text-[0.9em] '}>
+          <Tab onClick={() => setTabLocation('Accounts')} selectedClassName='text-branding' className={`md:hidden`}>Accounts</Tab>
           <Tab onClick={() => setTabLocation('Coins')} selectedClassName='text-branding'>Coins</Tab>
           <Tab onClick={() => setTabLocation('Favorites')} selectedClassName='text-branding'>Favorites</Tab>
           <Tab onClick={() => setTabLocation('Transactions')} selectedClassName='text-branding'>Transactions</Tab>
           <Tab onClick={() => setTabLocation('History')} selectedClassName='text-branding'>History</Tab>
         </TabList>
+        
+        <div className='md:hidden'>
+        <TabPanel className='md:hidden'>
+          <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} ></AccountTab>
+        </TabPanel>
+        </div>
 
         <TabPanel>
-          <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice}></AccountTab>
+          <CoinMarket></CoinMarket>
         </TabPanel>
       </Tabs>
+      </div>
     </div>
   </div>
 )}
