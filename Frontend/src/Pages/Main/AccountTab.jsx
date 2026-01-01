@@ -24,9 +24,34 @@ function AccountTab({ coinsDetails, coinPrice }) {
 
    return (
     <>
+         {/* Add wallet s*/}
+           <div className='flex justify-center items-center w-screen h-screen absolute left-0 top-0 z-20' 
+           style={{backgroundColor: 'rgba(107, 114, 128, 0.3)'}}>
+              <div className='w-1/4 rounded-xl h-1/2 bg-primary min-w-90 shadow-2xl p-6'>
+                   <h1 className='text-2xl font-bold mb-5'>Create Wallet</h1>
+                   <div>
+                      <form action="">
+                      <div className='flex flex-col gap-8'>
+                         <div>
+                           <label htmlFor="user_name">Name</label>
+                           <input type="text" name='user_name' className='w-full h-10 border rounded-xl border-branding px-5' />
+                         </div>
+
+                         <div>
+                           <label htmlFor="">Amount</label>
+                           <input type="number  " placeholder='$' className='w-full h-10 border rounded-xl border-branding px-5' />
+                         </div>
+                         <button className='w-full h-10 border border-branding rounded-xl text-branding hover:bg-branding hover:text-primary duration-150 cursor-pointer'> Create Wallet </button>
+                         </div>
+                      </form>
+                   </div>
+                   
+              </div>
+           </div>
+
        {/* Main container */}
        <div className="flex flex-col w-full h-full mt-5 px-10">
-
+           
            {/* Top action bar */}
            <div className='flex w-full h-auto justify-end items-center'>
               
@@ -45,6 +70,8 @@ function AccountTab({ coinsDetails, coinPrice }) {
                 </button>
               </div>
            </div>
+           
+         
 
            {/* Transaction modal overlay */}
            {transactionModalVisible && (
@@ -186,7 +213,11 @@ function AccountTab({ coinsDetails, coinPrice }) {
                </div>
             </div>
 
+            
+            
        </div>
+
+      
     </>
    )
 }

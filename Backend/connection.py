@@ -68,6 +68,9 @@ def loginVerification():
       ,'notificationHeader':'Failed'})
 
 
+@app.route('/createWallet',methods=["POST"])
+def createWallet():
+   data = request.json
   
    
 

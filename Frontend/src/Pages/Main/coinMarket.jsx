@@ -48,7 +48,7 @@ function coinMarket(){
       <td className="p-2 text-center"><FaStar/></td>
       <td className="p-2 text-left">{data.market_cap_rank}</td>
       <td className="p-2 text-left flex flex-row justify-start items-center gap-2">
-         {data.name} ({data.symbol.toUpperCase()})
+         {data.name}  <span className="text-xl hidden md:flex">|</span>  ({data.symbol.toUpperCase()})
          <img src={data.image} alt={data.name} className="size-5" />
       </td>
       <td className="p-2 text-right">${data.current_price?.toLocaleString()}</td>
