@@ -164,16 +164,16 @@ function Accountmodal({ showState, changeState }) {
         header: data.notificationHeader,
         message: data.message
       })
-
+      const token = data.token
       // Store dummy auth token
-      localStorage.setItem('token', 'user12345')
-
+      localStorage.setItem('token', token)
+      console.log(`Generated Token: ${token}` )
       // Trigger notification
       setNotificationVisibility(true)
       setnotifId(id => id + 1)
 
       // Redirect to dashboard
-      navigate('/dashboard', { replace: true })
+      navigate('/dashboard/account', { replace: true })
 
     } catch (error) {
       // Handle fetch or server errors

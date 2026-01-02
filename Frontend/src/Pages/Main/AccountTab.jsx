@@ -8,6 +8,8 @@ import { IoIosClose } from "react-icons/io"
 // Import useState hook for local state management
 import { useState } from 'react'
 
+import { IoClose } from "react-icons/io5";
+
 function AccountTab({ coinsDetails, coinPrice }) {
 
    // Controls visibility of the "Add Transaction" modal
@@ -22,32 +24,87 @@ function AccountTab({ coinsDetails, coinPrice }) {
    // Stores transaction type: 'buy' or 'sell'
    const [transactionState, setTransactionState] = useState('')
 
+   const [userWalletName , setWalletName] = useState('')
+   const [userWalletBalance, setWalletBalance] = useState()
+
+   const [showCreateAccount , setCreateAccount] = useState(false)
+
+   const [showWallets, setWallets] = useState([])
+   const handleAddWallet = async (e) => {
+     e.preventDefault()
+     setCreateAccount(false)
+     try {
+        const login_token = localStorage.getItem('token')
+        const [account,wallets] = await Promise.all([
+          fetch('/backend/createWallet', {
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body: JSON.stringify({
+             walletName : userWalletName,
+             walletBalance : userWalletBalance,
+             token : login_token
+          })
+        }),
+        fetch('/backend/getWallet',{
+          method:'POST',
+          headers:{
+             'Content-Type':'application/json'
+          },
+          body: JSON.stringify({
+            token: login_token
+          })
+        })
+        ])
+        if  (!account.ok || !wallets.ok) {
+          console.error('Request failed')
+         }
+        const user_wallets = await wallets.json()
+        setWallets(user_wallets.wallet)
+        console.log(user_wallets.wallet)
+       
+
+     } catch (error) {
+        console.log(error)
+     }
+   }
+
+   
    return (
     <>
-         {/* Add wallet s*/}
-           <div className='flex justify-center items-center w-screen h-screen absolute left-0 top-0 z-20' 
+         {/* Add wallet */}
+           {showCreateAccount &&(<div className='flex justify-center items-center w-screen h-screen absolute left-0  top-0 z-20' 
            style={{backgroundColor: 'rgba(107, 114, 128, 0.3)'}}>
               <div className='w-1/4 rounded-xl h-1/2 bg-primary min-w-90 shadow-2xl p-6'>
-                   <h1 className='text-2xl font-bold mb-5'>Create Wallet</h1>
+                  <div className='flex flex-row justify-between  items-center mb-5'>
+                     <h1 className='text-2xl font-bold '>Create Wallet</h1>
+                     <IoClose onClick={()=> setCreateAccount(false)} size={25}></IoClose>
+                  </div>
                    <div>
-                      <form action="">
+                      <form onSubmit={handleAddWallet}>
                       <div className='flex flex-col gap-8'>
                          <div>
                            <label htmlFor="user_name">Name</label>
-                           <input type="text" name='user_name' className='w-full h-10 border rounded-xl border-branding px-5' />
+                           <input type="text" name='user_name' className='w-full h-10 border rounded-xl border-branding px-5'
+                           value={userWalletName}
+                           onChange={(e)=> setWalletName(e.target.value)} />
                          </div>
 
                          <div>
                            <label htmlFor="">Amount</label>
-                           <input type="number  " placeholder='$' className='w-full h-10 border rounded-xl border-branding px-5' />
+                           <input type="number" placeholder='$' className='w-full h-10 border rounded-xl border-branding px-5' 
+                           value={userWalletBalance}
+                           onChange={(e)=> setWalletBalance(Number(e.target.value))}
+                           />
                          </div>
-                         <button className='w-full h-10 border border-branding rounded-xl text-branding hover:bg-branding hover:text-primary duration-150 cursor-pointer'> Create Wallet </button>
+                         <button type='submit' className='w-full h-10 border border-branding rounded-xl text-branding hover:bg-branding hover:text-primary duration-150 cursor-pointer'> Create Wallet </button>
                          </div>
                       </form>
                    </div>
                    
               </div>
-           </div>
+           </div>)}
 
        {/* Main container */}
        <div className="flex flex-col w-full h-full mt-5 px-10">
@@ -57,7 +114,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
               
               {/* Left side add icon */}
               <div className='flex flex-row w-1/2'>
-                <IoIosAdd className='size-6 cursor-pointer'/>
+                <IoIosAdd onClick={()=>setCreateAccount(true)} className='size-6 cursor-pointer hover:scale-125 duration-500'/>
               </div>
 
               {/* Right side add transaction button */}
@@ -199,18 +256,20 @@ function AccountTab({ coinsDetails, coinPrice }) {
            )}
 
            {/* Account summary section */}
-            <div className='w-full min-h-screen py-6'>
-               <div 
-                 className='w-full h-auto bg-gray-100 rounded-2xl py-2 px-4'
+            <div className='w-full  h-130 py-6 overflow-y-scroll'>
+              {showWallets.map((wallet,index) => (
+               <div key={index} 
+                 className='w-full h-auto bg-gray-100 rounded-2xl py-2 px-4 mb-5'
                  style={{ backgroundColor: 'rgba(107, 114, 128, 0.2)' }}
                >
                   <h1 className='font-semibold text-primary-dark'>
-                    Mark Alfred Cabungan
+                     {wallet.wallet_name}
                   </h1>
                   <p className='text-2xl font-bold text-primary-text'>
-                    30 $
+                    {wallet.balance}
                   </p>
                </div>
+              ))}
             </div>
 
             
