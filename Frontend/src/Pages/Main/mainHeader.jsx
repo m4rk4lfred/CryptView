@@ -4,8 +4,16 @@ import { IoMenu } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import {useState} from 'react'
 import {motion , AnimatePresence, easeIn, easeInOut} from 'motion/react'
+import { useNavigate } from 'react-router';
 function mainHeader({theme}){
-  const [isVisible,setNavigationVisibility] = useState(false)
+  const [isVisible,setNavigationVisibility] = useState(false) 
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    const tokenState = localStorage.getItem('token')
+    console.log(`Token State: ${tokenState}`)
+    navigate('/')
+  }
   return(
     <>
        <div className={`flex  justify-between w-screen h-auto px-10 pt-8 md:px-[8em] ${theme === 'dark' ? 'dark' : ''}`}>
@@ -24,6 +32,8 @@ function mainHeader({theme}){
                <li className='cursor-pointer   text-primary-dark dark:text-primary'>Accounts</li>
                <li className='cursor-pointer   text-primary-dark dark:text-primary'>Market</li>
                <li className='cursor-pointer   text-primary-dark dark:text-primary'>Profile</li>
+               <li onClick={handleLogout} className='cursor-pointer   text-primary-dark dark:text-primary'>Logout</li>
+
               </ul>
            </div>
             <AnimatePresence>
@@ -39,6 +49,7 @@ function mainHeader({theme}){
                <li className='my-20 cursor-pointer p-2  text-primary-dark dark:text-primary'>Accounts</li>
                <li className='my-20 cursor-pointer p-2  text-primary-dark dark:text-primary'>Market</li>
                <li className='my-20 cursor-pointer p-2  text-primary-dark dark:text-primary'>Profile</li>
+               <li onClick={handleLogout} className='my-20 cursor-pointer p-2  text-primary-dark dark:text-primary'>Logout</li>
               </ul>
            </motion.div>)}
            </AnimatePresence>

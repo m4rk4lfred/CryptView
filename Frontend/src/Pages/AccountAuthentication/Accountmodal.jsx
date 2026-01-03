@@ -167,7 +167,8 @@ function Accountmodal({ showState, changeState }) {
       const token = data.token
       // Store dummy auth token
       localStorage.setItem('token', token)
-      console.log(`Generated Token: ${token}` )
+      const storedToken = localStorage.getItem('token')
+      console.log(`Generated Token: ${token['user_id']}` )
       // Trigger notification
       setNotificationVisibility(true)
       setnotifId(id => id + 1)
@@ -179,8 +180,8 @@ function Accountmodal({ showState, changeState }) {
       // Handle fetch or server errors
       setNotification({
         type: 'error',
-        header: 'Error Connecting to database',
-        message: error.message
+        header: 'Invalid Credentials',
+        message: 'Input a correct Email or password'
       })
       setNotificationVisibility(true)
       setnotifId(id => id + 1)

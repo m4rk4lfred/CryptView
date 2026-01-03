@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
 from mysql.connector import pooling
+import jwt
 app = Flask(__name__)
 
+SECRET_KEY  = 'cryptview'
 db_pool = pooling.MySQLConnectionPool(
     pool_name="mypool",
     pool_size=5,         
@@ -15,6 +17,11 @@ db_pool = pooling.MySQLConnectionPool(
 )
 
 
+
+def createToken(user_id):
+    payload = {  'user_id' : user_id}
+    token = jwt.encode(payload ,SECRET_KEY , 'HS256' )
+    return token
 
 @app.route('/')
 def helloWorld():
@@ -51,32 +58,70 @@ def loginVerification():
   entered_email = data['email']
   entered_password = data['user_password']
   db_pool_connection = db_pool.get_connection()
-  cursor = db_pool_connection.cursor()
+  cursor = db_pool_connection.cursor(dictionary=True)
   
   cursor.execute('SELECT * FROM credentials WHERE email=%s',(entered_email,))
   email_check = cursor.fetchone()
-
+  
+  db_pool_connection.close()
+  cursor.close()
   if not email_check:
      return jsonify({'message': 'Account dont exist'})
- 
-  stored_password = email_check[3]
+  
+
+  stored_password = email_check['password']
   if entered_password == stored_password:
+      token = createToken(email_check['user_id'])
       return jsonify({'message': 'Login successful', 'notificationType':''
-      ,'notificationHeader':'Successful'}), 200
+      ,'notificationHeader':'Successful','token':token ,}), 200
   else:
       return jsonify({'message': 'Wrong password','notificationType':'error'
-      ,'notificationHeader':'Failed'})
+      ,'notificationHeader':'Failed'}),401
+  
+
 
 
 @app.route('/createWallet',methods=["POST"])
 def createWallet():
-   data = request.json
-  
+   try: 
+    data = request.json
+    wallet_Name = data['walletName']
+    wallet_Balance = data['walletBalance']
+    token = data['token']
+    decoded_token = jwt.decode(token,SECRET_KEY,algorithms=['HS256'])
+    user_id = decoded_token['user_id']
+    db_pool_connection = db_pool.get_connection()
+    cursor = db_pool_connection.cursor()
+    sql = "INSERT INTO wallet(wallet_name,balance,user_id) VALUES(%s,%s,%s)"  
+    cursor.execute(sql,(wallet_Name,wallet_Balance,user_id))
+    db_pool_connection.commit()
+    cursor.close()
+    db_pool_connection.close()
+    return jsonify({'message':'Successfully added'}),201
+   except Exception as e:
+      return jsonify({'message':'Failed to return '}),401
+
+@app.route('/getWallet',methods=['POST'])
+def getWallet():
+   try:
+     data  =  request.json
+     user_token = data['token']
+     decoded_token = jwt.decode(user_token,SECRET_KEY,algorithms=['HS256'])
+     user_id = decoded_token['user_id']
+     db_pool_connection = db_pool.get_connection()
+     cursor = db_pool_connection.cursor(dictionary=True)
+     sql = 'SELECT * FROM wallet WHERE user_id=%s'
+     cursor.execute(sql,(user_id, ))
+     wallets = cursor.fetchall()
+
+     
+     cursor.close()
+     db_pool_connection.close()
+
+     return jsonify({'wallet': wallets}),200
+   except Exception as e:
+    return jsonify({'message':'Failed to return '}),401
+
    
-
-    
-
-    
-
 if __name__ == '__main__':
     app.run(debug=True)

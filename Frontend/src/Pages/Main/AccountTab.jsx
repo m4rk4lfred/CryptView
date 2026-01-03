@@ -6,7 +6,7 @@ import { IoIosAdd } from "react-icons/io"
 import { IoIosClose } from "react-icons/io"
 
 // Import useState hook for local state management
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 
 import { IoClose } from "react-icons/io5";
 
@@ -30,6 +30,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
    const [showCreateAccount , setCreateAccount] = useState(false)
 
    const [showWallets, setWallets] = useState([])
+
    const handleAddWallet = async (e) => {
      e.preventDefault()
      setCreateAccount(false)
@@ -69,7 +70,35 @@ function AccountTab({ coinsDetails, coinPrice }) {
         console.log(error)
      }
    }
-
+   
+  useEffect(() => {
+  const fetchAccount = async () => {
+    try {
+      const login_token = localStorage.getItem('token')
+      const response = await fetch('/backend/getWallet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token: login_token
+        })
+      })
+      
+      if (!response.ok) {
+        console.error('Request failed')
+        return
+      }
+      
+      const data = await response.json()
+      setWallets(data.wallet)
+    } catch (error) {
+      console.error('Error fetching wallets:', error)
+    }
+  }
+  
+  fetchAccount()
+}, [])
    
    return (
     <>
