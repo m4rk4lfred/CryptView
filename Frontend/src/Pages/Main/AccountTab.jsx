@@ -10,7 +10,7 @@ import { useState,useEffect } from 'react'
 
 import { IoClose } from "react-icons/io5";
 
-function AccountTab({ coinsDetails, coinPrice }) {
+function AccountTab({ coinsDetails, coinPrice, walletBalance }) {
 
    // Controls visibility of the "Add Transaction" modal
    const [transactionModalVisible, setTransactionModal] = useState(false)
@@ -21,8 +21,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
    // Stores the currently selected coin from the dropdown
    const [selectedCoin, setSelectedCoin] = useState(null)
 
-   // Stores transaction type: 'buy' or 'sell'
-   const [transactionState, setTransactionState] = useState('')
+
 
    const [userWalletName , setWalletName] = useState('')
    const [userWalletBalance, setWalletBalance] = useState()
@@ -30,6 +29,73 @@ function AccountTab({ coinsDetails, coinPrice }) {
    const [showCreateAccount , setCreateAccount] = useState(false)
 
    const [showWallets, setWallets] = useState([])
+   const [selectedWallet, setSelectedWallet] = useState()
+   const [transactionType,setTransactionType] = useState('BUY')
+
+   const [coinQuantity , setCoinQuantity] = useState()
+   const [pricePerCoin,setCoinPrice] = useState()
+
+   const[currentDate,setDate]=useState()
+
+   
+   function handleSelectedAccount(accountId,currentBalance){
+      localStorage.setItem('selectedWallet', accountId)
+      setSelectedWallet(accountId)
+      walletBalance(currentBalance)
+   }
+   useEffect(()=>{
+     if(showWallets.length > 0 && !selectedWallet){
+        setSelectedWallet(showWallets[0].wallet_id)
+        walletBalance(showWallets[0].balance)
+     }
+   },[showWallets])
+   
+   useEffect(() => {
+  if (selectedCoin) {
+    setCoinPrice(coinPrice[selectedCoin.coinTitle])
+  }
+}, [selectedCoin, coinPrice])
+   const handleTransaction =async () => {
+      const requestBody = {
+      walletId: selectedWallet,
+      cryptoName: selectedCoin.coinTitle,
+      cryptoSymbol: selectedCoin.coinSymbol,
+      cryptoLogo: selectedCoin.coinImage,
+      transactionType: transactionType,
+      quantity: coinQuantity,
+      pricePerCoin: pricePerCoin,
+      transactionDate: currentDate
+    }
+
+    console.log('Request Data:', requestBody)
+    try {
+       const transaction= await fetch('/backend/addTransaction',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({
+          walletId: selectedWallet,
+          cryptoName: selectedCoin.coinTitle ,
+          cryptoSymbol:selectedCoin.coinSymbol,
+          cryptoLogo: selectedCoin.coinImage,
+          transactionType: transactionType,
+          quantity: coinQuantity,
+          pricePerCoin: pricePerCoin,
+          transactionDate:currentDate
+        }
+      )
+       }
+       
+      )
+      console.log('Request Data:', requestBody)
+      const data = await transaction.json()
+      console.log(data.message)
+
+    } catch (error) {
+      console.error(`Error:${error}`)
+    }
+   }
 
    const handleAddWallet = async (e) => {
      e.preventDefault()
@@ -63,6 +129,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
          }
         const user_wallets = await wallets.json()
         setWallets(user_wallets.wallet)
+
         console.log(user_wallets.wallet)
        
 
@@ -162,7 +229,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
            {/* Transaction modal overlay */}
            {transactionModalVisible && (
              <div 
-               className='flex justify-center p-6 items-center w-screen h-screen fixed bg-gray-400 top-0 left-0'
+               className='flex z-50 justify-center p-6 items-center w-screen h-screen fixed bg-gray-400 top-0 left-0'
                style={{ backgroundColor: 'rgba(107, 114, 128, 0.3)' }}
              >
 
@@ -184,13 +251,13 @@ function AccountTab({ coinsDetails, coinPrice }) {
                     {/* Buy / Sell selection */}
                     <div className='grid grid-cols-2 gap-4 mt-5'>
                          <div 
-                           onClick={() => setTransactionState('buy')} 
+                           onClick={() => setTransactionType('BUY')} 
                            className='w-full h-8 flex justify-center rounded-xl items-center bg-[#8DDDBA] cursor-pointer'
                          >
                            Buy
                          </div>
                          <div 
-                           onClick={() => setTransactionState('sell')} 
+                           onClick={() => setTransactionType('SELL')} 
                            className='w-full h-8 flex justify-center rounded-xl items-center bg-[#E88B8B] cursor-pointer'
                          >
                            Sell
@@ -227,6 +294,8 @@ function AccountTab({ coinsDetails, coinPrice }) {
                                 <input 
                                   type="number" 
                                   className='w-full h-12 mt-3 px-2 rounded-lg border' 
+                                  value={coinQuantity}
+                                  onChange={(e) => setCoinQuantity(e.target.value)}
                                   required
                                 />
                             </div>
@@ -235,7 +304,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
                                 <p>Price per Coin</p>
                                 <input 
                                   type="text" 
-                                  value={coinPrice[selectedCoin?.coinTitle] || ''} 
+                                  value={pricePerCoin || ''}
                                   className='w-full px-2 h-12 mt-3 rounded-lg border' 
                                   readOnly 
                                 />
@@ -246,13 +315,15 @@ function AccountTab({ coinsDetails, coinPrice }) {
                         <div>
                             <input 
                               type="date" 
+                              value={currentDate}
+                              onChange={(e)=>setDate(e.target.value)}
                               className='w-full px-2 h-12 mt-3 rounded-lg border' 
                             />
                         </div>
 
                         {/* Submit button */}
                         <div>
-                            <button className='w-full text-branding h-12 border border-branding mt-5 rounded-lg'>
+                            <button onClick={handleTransaction} className='w-full text-branding h-12 border border-branding mt-5 rounded-lg'>
                               Add transaction
                             </button>
                         </div>
@@ -265,6 +336,7 @@ function AccountTab({ coinsDetails, coinPrice }) {
                                         key={index}
                                         onClick={() => {
                                             setSelectedCoin(coin)
+                                            setCoinPrice(coinPrice[coin.coinTitle])
                                             setDropdownOpen(false)
                                         }}
                                         className='flex items-center gap-2 p-3 hover:bg-gray-100 cursor-pointer'
@@ -285,11 +357,11 @@ function AccountTab({ coinsDetails, coinPrice }) {
            )}
 
            {/* Account summary section */}
-            <div className='w-full  h-130 py-6 overflow-y-scroll'>
-              {showWallets.map((wallet,index) => (
-               <div key={index} 
-                 className='w-full h-auto bg-gray-100 rounded-2xl py-2 px-4 mb-5'
-                 style={{ backgroundColor: 'rgba(107, 114, 128, 0.2)' }}
+            <div  className='w-full  h-130 py-6 overflow-y-scroll'>
+              {showWallets.map((wallet) => (
+               <div key={wallet.wallet_id} 
+                 className={`w-full h-auto ${selectedWallet==wallet.wallet_id?'bg-gray-200':'bg-gray-100'} rounded-2xl py-2 px-4 mb-5`}
+                 onClick={()=>handleSelectedAccount(wallet.wallet_id,wallet.balance)}
                >
                   <h1 className='font-semibold text-primary-dark'>
                      {wallet.wallet_name}

@@ -113,7 +113,7 @@ def getWallet():
      sql = 'SELECT * FROM wallet WHERE user_id=%s'
      cursor.execute(sql,(user_id, ))
      wallets = cursor.fetchall()
-
+    
      
      cursor.close()
      db_pool_connection.close()
@@ -122,6 +122,64 @@ def getWallet():
    except Exception as e:
     return jsonify({'message':'Failed to return '}),401
 
+
+@app.route('/addTransaction',methods=['POST'])
+def handleTransaction():
+   try:
+    data = request.json
+    wallet_id = data['walletId']
+    crypto_name = data['cryptoName']
+    crypto_symbol = data['cryptoSymbol']
+    crypto_logo = data['cryptoLogo']
+    transaction_type = data['transactionType']
+    quantity = data['quantity']
+    pricePerCoin = data['pricePerCoin']
+    transaction_date = data['transactionDate']
+ 
+    db_pool_connection = db_pool.get_connection()
+    cursor = db_pool_connection.cursor(dictionary=True)
+    cursor.execute('INSERT INTO transactions(wallet_id,crypto_name,crypto_symbol,crypto_logo,transaction_type,quantity,price_per_coin,transaction_date) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)',(wallet_id,crypto_name,crypto_symbol,crypto_logo,transaction_type,quantity,pricePerCoin,transaction_date))
+ 
+    db_pool_connection.commit()
+    db_pool_connection.close()
+    cursor.close()
+    
+    return jsonify({'message':'Successfully added'}),201
+   except Exception as e:
+    return jsonify({'message':'failed to add'})
+
+@app.route('/fetchTransaction', methods=['POST'])
+def fetchTransaction():
+   try:
+     data = request.json
+     db_pool_connection = db_pool.get_connection()
+     cursor = db_pool_connection.cursor(dictionary=True) 
+     selected_wallet = data['walletId']
+     cursor.execute('SELECT * from transactions WHERE wallet_id=%s', (selected_wallet, ))
+     fetchedData = cursor.fetchall()
+   
+     db_pool_connection.close()
+     cursor.close()
+     return jsonify({'transactionData' : fetchedData }),201
+
+   except Exception as e:
+     return jsonify({'data' : e}),401
+
+@app.route('/deleteTransaction',methods=['POST'])
+def deleteTransaction():
+   try:
+      data = request.json
+      transactionId = data['transaction_id']
+      db_pool_connection = db_pool.get_connection()
+      cursor = db_pool_connection.cursor(dictionary=True)
+      cursor.execute('DELETE FROM transactions WHERE transaction_id=%s',(transactionId ,))
+      db_pool_connection.commit()  
+      cursor.close()  
+      db_pool_connection.close() 
+      return jsonify({'message':'Successfully deleted'})
+   except Exception as e:  
+      return jsonify({'message':e})
+   
    
 if __name__ == '__main__':
     app.run(debug=True)

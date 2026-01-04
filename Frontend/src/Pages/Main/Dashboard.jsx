@@ -6,12 +6,13 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { useState,useEffect } from 'react';
 import { PiExport } from "react-icons/pi";
 import CoinMarket from '../Main/coinMarket'
+import TransactionTab from '../Main/transactionTab'
 {/* dashboard component */}
 function Dashboard(){
   const [fetchedCoins, setFetchedCoins] = useState([]); 
   const [isLoading, setLoading] = useState(true)
   const [currentPrice, setPrice] = useState({})
-  
+  const [currentBalance , setBalance] = useState()
   useEffect(() => {
     const ping = async () => {
       try {
@@ -31,6 +32,8 @@ function Dashboard(){
         const Coins = data.map((coins) => ({
           coinImage:coins.image,
           coinTitle: coins.name ,  
+          coinSymbol: coins.symbol,
+          
         }))
         const coinsPrice = data.reduce((acc , coins) =>{
           acc[coins.name] = coins.current_price 
@@ -124,7 +127,7 @@ function Dashboard(){
       <div>
         <h1 className="text-2xl px-10 mb-5 font-bold ">{tabLocation}</h1>
         <div className='hidden md:flex w-auto h-auto'>
-           <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} ></AccountTab>
+           <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} walletBalance={setBalance}></AccountTab>
         </div>
       </div>
       
@@ -133,7 +136,7 @@ function Dashboard(){
        <div className='hidden md:flex justify-between items-center'>
            <div className='flex flex-col gap-3 text-primary-dark'>
             <h1 className='text-3xl font-bold tracking-[0.35em]'>Wallet</h1>
-            <p  className='text-5xl font-bold tracking-[0.15em]'>30$</p>
+            <p  className='text-5xl font-bold tracking-[0.15em]'>{currentBalance}$</p>
         </div>
 
         <div>
@@ -155,13 +158,25 @@ function Dashboard(){
         
         <div className='md:hidden'>
         <TabPanel className='md:hidden'>
-          <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} ></AccountTab>
+          <AccountTab coinsDetails={fetchedCoins} coinPrice={currentPrice} walletBalance={setBalance} ></AccountTab>
         </TabPanel>
         </div>
 
         <TabPanel>
           <CoinMarket></CoinMarket>
         </TabPanel>
+        
+        <TabPanel>
+
+        </TabPanel>
+
+
+        <TabPanel className={'p-4'}>
+          <TransactionTab>
+
+          </TransactionTab>
+        </TabPanel>
+
       </Tabs>
       </div>
     </div>
