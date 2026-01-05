@@ -172,6 +172,10 @@ def deleteTransaction():
       transactionId = data['transaction_id']
       db_pool_connection = db_pool.get_connection()
       cursor = db_pool_connection.cursor(dictionary=True)
+      query2 = db_pool_connection.cursor(dictionary=True)
+      query2.execute('SELECT * FROM transactions WHERE transaction_id=%s',(transactionId ,))
+      data_to_delete  = query2.fetchone()
+      addHistory(data_to_delete)
       cursor.execute('DELETE FROM transactions WHERE transaction_id=%s',(transactionId ,))
       db_pool_connection.commit()  
       cursor.close()  
@@ -179,7 +183,40 @@ def deleteTransaction():
       return jsonify({'message':'Successfully deleted'})
    except Exception as e:  
       return jsonify({'message':e})
-   
-   
+
+def addHistory(data):
+  try:
+    db_pool_connection = db_pool.get_connection()
+    cursor = db_pool_connection.cursor(dictionary=True)
+    addQuery = 'INSERT INTO transaction_history(wallet_id ,crypto_name,crypto_symbol,crypto_logo,transaction_type,quantity,price_per_coin,total_value,transaction_date,created_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+    cursor.execute(addQuery, (data['wallet_id'], data['crypto_name'] , data['crypto_symbol'] , data['crypto_logo'] , data['transaction_type'] , data['quantity'] , data['price_per_coin'], data['total_value'], data['transaction_date'], data['created_at'], ))
+    
+    db_pool_connection.commit()
+    db_pool_connection.close()
+    cursor.close()
+
+    return jsonify({'message':'added to the history'}), 201
+  except Exception as e:
+     return jsonify({'message':'failed to add to history'}), 401
+
+@app.route('/getTransactionHistory',methods=['POST'])
+def transactionHistory():
+   try:
+    data = request.json
+    walletId = data['wallet_id']
+    db_pool_connection = db_pool.get_connection()
+    cursor = db_pool_connection.cursor(dictionary=True)
+    sql = 'SELECT * FROM transaction_history WHERE wallet_id=%s'
+    cursor.execute(sql , (walletId, ))
+    
+    transaction_history = cursor.fetchall()
+ 
+ 
+    cursor.close()
+    db_pool_connection.close()
+    print(transaction_history)
+    return jsonify({'fetched_history' : transaction_history})
+   except Exception as e:
+    return jsonify({'message' : e})
 if __name__ == '__main__':
     app.run(debug=True)

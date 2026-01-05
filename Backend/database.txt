@@ -20,3 +20,26 @@ PRIMARY KEY(transaction_id),
 FOREIGN KEY(wallet_id) REFERENCES wallet(wallet_id)
 ON DELETE CASCADE
 )
+
+USE cryptview;
+
+CREATE TABLE transaction_history(
+transaction_history_id INT NOT NULL AUTO_INCREMENT ,
+wallet_id INT NOT NULL, 
+crypto_name VARCHAR(55) NOT NULL,
+crypto_symbol VARCHAR(15) NOT NULL,
+crypto_logo VARCHAR(255) NOT NULL,
+transaction_type ENUM('BUY','SELL')NOT NULL, 
+quantity DECIMAL(18,8) NOT NULL,
+price_per_coin DECIMAL(18,8) NOT NULL,
+    
+total_value DECIMAL(18,8)
+    GENERATED ALWAYS AS (quantity * price_per_coin) STORED,
+
+    transaction_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+PRIMARY KEY(transaction_history_id),
+FOREIGN KEY(wallet_id) REFERENCES wallet(wallet_id)
+ON DELETE CASCADE
+)
