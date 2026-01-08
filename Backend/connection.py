@@ -218,5 +218,50 @@ def transactionHistory():
     return jsonify({'fetched_history' : transaction_history})
    except Exception as e:
     return jsonify({'message' : e})
+
+@app.route('/addFavorite', methods=['POST'])
+def addFavorite():
+  try:
+   data = request.json
+   walletId = data['wallet_id']
+   cryptoName = data['crypto_name']
+   cryptoSymbol = data['crypto_symbol']
+   crpytoLogo = data['crypto_logo']
+   perCoin = data['price_per_coin']
+   totalValue = data['total_value']
+ 
+   db_pool_connection = db_pool.get_connection()
+   cursor = db_pool_connection.cursor(dictionary=True)
+ 
+   cursor.execute('INSERT INTO favorite_crypto(wallet_id,crypto_name,crypto_symbol,crypto_logo,price_per_coin,total_value) VALUES(%s,%s,%s,%s,%s,%s)', (walletId, cryptoName
+                                                                                                                                                        ,cryptoSymbol,crpytoLogo,perCoin,totalValue, ))
+   db_pool_connection.commit()
+   db_pool_connection.close()
+   cursor.close()
+ 
+   return jsonify({'message':'Successfully Added Favorited'}),201
+  except Exception as e:
+    return jsonify({'message':e}),401
+
+@app.route('/fetchFavorites', methods=['POST'])
+def fetchFavorites():
+  try:
+   data = request.json
+   wallet = data['selected_wallet']
+   db_pool_connection = db_pool.get_connection()
+   cursor = db_pool_connection.cursor(dictionary=True)
+ 
+   fetch_favorite = 'SELECT * FROM favorite_crypto WHERE wallet_id=%s'
+   cursor.execute(fetch_favorite, (wallet, ))
+   favorite_item = cursor.fetchall()
+   db_pool_connection.commit()
+   
+   return jsonify({'message':'Successfully fetched the favorited items'})
+
+   cursor.close()
+   db_pool_connection.close()
+   
+  except Exception as e:
+    return jsonify({'message':'Failed to fetch the favorited items'})
 if __name__ == '__main__':
     app.run(debug=True)

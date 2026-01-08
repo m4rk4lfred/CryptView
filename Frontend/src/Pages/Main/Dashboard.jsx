@@ -8,6 +8,7 @@ import { PiExport } from "react-icons/pi";
 import CoinMarket from '../Main/coinMarket'
 import TransactionTab from '../Main/transactionTab'
 import HistoryTab from '../Main/historyTab'
+import FavoritesTab from '../Main/FavoritesTab'
 {/* dashboard component */}
 function Dashboard(){
   const [fetchedCoins, setFetchedCoins] = useState([]); 
@@ -167,8 +168,10 @@ function Dashboard(){
           <CoinMarket></CoinMarket>
         </TabPanel>
         
-        <TabPanel>
+        <TabPanel className={'p-4'}>
+           <FavoritesTab>
 
+           </FavoritesTab>
         </TabPanel>
 
 
