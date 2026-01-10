@@ -230,11 +230,12 @@ def addFavorite():
    perCoin = data['price_per_coin']
    totalValue = data['total_value']
  
+ 
    db_pool_connection = db_pool.get_connection()
    cursor = db_pool_connection.cursor(dictionary=True)
  
    cursor.execute('INSERT INTO favorite_crypto(wallet_id,crypto_name,crypto_symbol,crypto_logo,price_per_coin,total_value) VALUES(%s,%s,%s,%s,%s,%s)', (walletId, cryptoName
-                                                                                                                                                        ,cryptoSymbol,crpytoLogo,perCoin,totalValue, ))
+                                                                                                                                                        ,cryptoSymbol,crpytoLogo,perCoin,totalValue,  ))
    db_pool_connection.commit()
    db_pool_connection.close()
    cursor.close()
@@ -256,12 +257,31 @@ def fetchFavorites():
    favorite_item = cursor.fetchall()
    db_pool_connection.commit()
    
-   return jsonify({'message':'Successfully fetched the favorited items'})
 
    cursor.close()
    db_pool_connection.close()
+   return jsonify({'items':favorite_item})
    
   except Exception as e:
     return jsonify({'message':'Failed to fetch the favorited items'})
+@app.route('/deleteFavorited',methods=['POST'])
+def deleteFavorited():
+  try:
+   data = request.json
+   selected_wallet = data['wallet']
+   crypto_name = data['name']
+   pool_connection = db_pool.get_connection()
+   cursor = pool_connection.cursor(dictionary=True)
+ 
+   delete_query = 'DELETE FROM favorite_crypto WHERE wallet_id=%s AND crypto_name=%s'
+   cursor.execute(delete_query , (selected_wallet, crypto_name, ))
+
+   pool_connection.commit()
+   cursor.close()
+   pool_connection.close()
+   return jsonify('message','Successfully delete ')
+  except Exception as e:
+    return jsonify('message','Failed to delete the item')
+
 if __name__ == '__main__':
     app.run(debug=True)
